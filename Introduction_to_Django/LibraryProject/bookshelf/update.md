@@ -1,4 +1,4 @@
-retrieved.title = "Nineteen Eighty-Four"
-retrieved.save()
-print(retrieved.title)
-# Output: Nineteen Eighty-Four
+book = Book.objects.get(title="1984")
+book.title = "Nineteen Eighty-Four"
+book.save()
+# Output: Title successfully updated to "Nineteen Eighty-Four"
