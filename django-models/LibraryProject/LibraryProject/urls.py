@@ -20,5 +20,6 @@ from django.contrib import admin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('bookshelf.urls')),  # Include app URLs
+    path('bookshelf/', include('bookshelf.urls')),
+    path('library/', include('relationship_app.urls')),
 ]
