@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Book
+from relationship_app.models import Book
 
 def book_list(request):
     books = Book.objects.all()
