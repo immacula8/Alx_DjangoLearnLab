@@ -16,10 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from relationship_app.views import list_books  # or any view you want as homepage
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('bookshelf/', include('bookshelf.urls')),
     path('library/', include('relationship_app.urls')),
+    path('', list_books),  # 👈 this shows list_books at http://127.0.0.1:8000/
 ]
