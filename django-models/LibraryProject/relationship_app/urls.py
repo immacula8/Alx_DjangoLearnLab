@@ -3,6 +3,8 @@ from . import views
 from django.contrib.auth.views import LoginView, LogoutView
 from .views import admin_view, librarian_view, member_view
 from .views import add_book, edit_book, delete_book
+from .views import list_books, LibraryDetailView
+
 
 urlpatterns = [
     path('books/', views.list_books, name='book_list'),
