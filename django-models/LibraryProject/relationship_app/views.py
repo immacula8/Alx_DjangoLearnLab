@@ -7,6 +7,8 @@ from .models import Library, Book
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.shortcuts import render
 from .models import UserProfile
+from django.contrib.auth.decorators import permission_required
+
 
 
 
