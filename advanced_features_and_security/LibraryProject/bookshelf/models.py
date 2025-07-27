@@ -1,14 +1,13 @@
-
-
-#class Book(models.Model):
- #   title = models.CharField(max_length=200)
-  #  author = models.CharField(max_length=100)
-   # publication_year = models.IntegerField()
-#
- #   def __str__(self):
-  #      return f"{self.title} by {self.author}"
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
+
+class Book(models.Model):
+    title = models.CharField(max_length=200)
+    author = models.CharField(max_length=100)
+    publication_year = models.IntegerField()
+
+    def __str__(self):
+         return f"{self.title} by {self.author}"
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, username, email, password=None, **extra_fields):
@@ -37,6 +36,21 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+class Article(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+
+    class Meta:
+        permissions = [
+            ("can_view", "Can view article"),
+            ("can_create", "Can create article"),
+            ("can_edit", "Can edit article"),
+            ("can_delete", "Can delete article"),
+        ]
+
+    def __str__(self):
+        return self.title
 
     
 

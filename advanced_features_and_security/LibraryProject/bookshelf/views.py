@@ -1,25 +1,38 @@
-from django.shortcuts import render
-from .models import Book
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required, permission_required
 from relationship_app.models import Book
-from django.contrib.auth.decorators import permission_required
-
 
 def book_list(request):
     books = Book.objects.all()
     return render(request, 'bookshelf/book_list.html', {'books': books})
 
+@login_required
 @permission_required('relationship_app.can_add_book', raise_exception=True)
 def add_book(request):
-    # handle adding a book
-    ...
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        author = request.POST.get('author')
+        if title and author:
+            Book.objects.create(title=title, author=author)
+            return redirect('book_list')
+    return render(request, 'bookshelf/add_book.html')
 
+@login_required
 @permission_required('relationship_app.can_change_book', raise_exception=True)
 def edit_book(request, pk):
-    # handle editing a book
-    ...
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == 'POST':
+        book.title = request.POST.get('title')
+        book.author = request.POST.get('author')
+        book.save()
+        return redirect('book_list')
+    return render(request, 'bookshelf/edit_book.html', {'book': book})
 
+@login_required
 @permission_required('relationship_app.can_delete_book', raise_exception=True)
 def delete_book(request, pk):
-    # handle deleting a book
-    ...
-
+    book = get_object_or_404(Book, pk=pk)
+    if request.method == 'POST':
+        book.delete()
+        return redirect('book_list')
+    return render(request, 'bookshelf/delete_book.html', {'book': book})
