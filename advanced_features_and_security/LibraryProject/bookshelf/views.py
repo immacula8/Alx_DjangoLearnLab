@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from relationship_app.models import Book
 from django.http import HttpResponseBadRequest
-from .forms import forms
+from .forms import ExampleForm
 
 def book_list(request):
     books = Book.objects.all()
