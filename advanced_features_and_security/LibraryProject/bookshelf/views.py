@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from relationship_app.models import Book
+from django.http import HttpResponseBadRequest
+from .forms import forms
 
 def book_list(request):
     books = Book.objects.all()
@@ -36,3 +38,10 @@ def delete_book(request, pk):
         book.delete()
         return redirect('book_list')
     return render(request, 'bookshelf/delete_book.html', {'book': book})
+
+def search_books(request):
+    query = request.GET.get('q', '')
+    if not query.isalnum():  # Input validation
+        return HttpResponseBadRequest("Invalid input")
+    results = Book.objects.filter(title__icontains=query)  # ORM: SQL-safe
+    return render(request, 'bookshelf/book_list.html', {'books': results})
