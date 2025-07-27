@@ -23,3 +23,23 @@ Used `@permission_required` with `raise_exception=True` to restrict access.
    - `/articles/create/`
    - `/articles/edit/<id>/`
    - `/articles/delete/<id>/`
+
+# Django Security Enhancements
+
+## 1. Settings Configured
+- DEBUG=False: prevents sensitive error page exposure
+- XSS, nosniff, clickjacking, secure cookies settings enforced
+- CSP middleware integrated
+
+## 2. CSRF Protection
+- All forms include {% csrf_token %}
+
+## 3. SQL Injection Prevention
+- Views use Django ORM
+- Query inputs validated using .isalnum()
+
+## 4. Manual Tests
+- Tried XSS with <script>alert(1)</script>: Blocked
+- Omitted csrf_token on form submit: CSRF token missing error shown
+- Tried input: `' OR 1=1--`: Blocked by input validation
+
