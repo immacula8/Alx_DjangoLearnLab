@@ -38,9 +38,15 @@ class BookAPITestCase(APITestCase):
         response = self.client.post(url, data, format='json')
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIn("title", response.data)
+        self.assertEqual(response.data["title"], "Things Fall Apart")
         self.assertEqual(Book.objects.count(),before_count + 1)
         self.assertEqual(Book.objects.last().title, "Things Fall Apart")
 
     def test_example(self):
         response = self.client.get('/api/books/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        self.assertIsInstance(response.data, list)
+        self.assertGreater(len(response.data), 0)
+        self.assertIn("title", response.data[0])
