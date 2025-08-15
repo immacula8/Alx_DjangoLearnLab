@@ -12,7 +12,7 @@
         <nav>
     <ul>
         <li><a href="{% url 'profile' %}">Home</a></li>
-        <li><a href="{% url 'posts' %}">Blog Posts</a></li>
+        <li><a href="{% url 'post_list' %}">Blog Posts</a></li>
 
         {% if user.is_authenticated %}
             <!-- Logout POST form -->

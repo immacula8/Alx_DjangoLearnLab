@@ -15,6 +15,8 @@ from .forms import PostForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
+from django.db.models import Q
+
 
 
 # Registration view
@@ -57,11 +59,19 @@ def posts(request):
 class PostListView(ListView):
     model = Post
     template_name = 'blog/post_list.html'
-    context_object_name = 'posts'      
+    context_object_name = 'posts' 
+    ordering = ['-date_posted']     
 
     
     def get_queryset(self):
-        return Post.objects.filter(status='published').order_by('-published_date')
+        query = self.request.GET.get('q')
+        if query:
+            return Post.objects.filter(
+                Q(title__icontains=query) |
+                Q(content__icontains=query) |
+                Q(tags__name__icontains=query)  # Only if you have tags
+            ).distinct()
+        return Post.objects.all()
 
 
 # Show a single post detail
@@ -211,4 +221,34 @@ class CommentDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         comment = self.get_object()
         return self.request.user == comment.author
+    
+def search_posts(request):
+    query = request.GET.get('q')
+    results = Post.objects.all()
+    if query:
+        results = results.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct()
+    return render(request, 'blog/search_results.html', {'results': results})
+
+def posts_by_tag(request, tag_name):
+    posts = Post.objects.filter(
+        status='published',
+        tags__name__iexact=tag_name
+    ).order_by('-published_date')
+    return render(request, 'blog/post_list.html', {'posts': posts, 'tag': tag_name})
+
+def search_posts(request):
+    query = request.GET.get('q', '').strip()
+    posts = Post.objects.filter(status='published')
+    if query:
+        posts = posts.filter(
+            Q(title__icontains=query) |
+            Q(content__icontains=query) |
+            Q(tags__name__icontains=query)
+        ).distinct().order_by('-published_date')
+    return render(request, 'blog/search_results.html', {'posts': posts, 'query': query})
+
 
