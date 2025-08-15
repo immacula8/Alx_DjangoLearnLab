@@ -39,3 +39,16 @@ Once everything was wired up, I ran migrations to update the database so it coul
 Finally, I tested it:
 I opened a post, typed a comment, submitted it, and saw it appear instantly on the post’s page. Then, I confirmed in the admin panel that the comment was saved correctly and linked to the right post. Everything worked — both frontend display and backend management.
 
+##Implementing Advanced Features: Tagging and Search Functionality##
+
+In this update to my blog application, I integrated tagging functionality, improved post creation and update forms, and configured URLs to support tag-based navigation. These changes enhance both the content management process for authors and the browsing experience for readers.
+
+To begin, I enabled the django-taggit library by adding "taggit" to the INSTALLED_APPS list in my settings.py file. This library provides a simple and flexible way to add tags to models without having to manually implement a tagging system from scratch. I then updated my Post model to include a tags field using TaggableManager. This allows each blog post to have one or more tags, which can later be used to filter and organize posts by topics.
+
+Next, I modified the post creation and update forms in forms.py to include tag input. To make the tagging experience more user-friendly, I used TagWidget from taggit and specified it in the form’s Meta class using the widgets dictionary. This ensures that when creating or editing a post, I can easily add tags in a clean and intuitive input field.
+
+I also worked on the URL configuration to support browsing posts by specific tags. In urls.py, I added a new path, tags/<slug:tag_slug>/, and connected it to a PostByTagListView class-based view. This view retrieves posts that match a given tag slug, allowing readers to click on a tag and instantly see all related posts.
+
+Finally, I updated the templates to display tags on the post list and detail pages, and I made sure that each tag is clickable, leading to its filtered list view. This improvement not only organizes content better but also increases engagement by helping readers explore related topics.
+
+With these changes, my blog now supports tagging in a seamless way, making content easier to find and giving authors a better workflow for categorizing their posts.
