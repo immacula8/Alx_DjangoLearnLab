@@ -2,7 +2,8 @@ from rest_framework import viewsets, permissions
 from .models import Post, Comment
 from .serializers import PostSerializer, CommentSerializer
 from rest_framework import filters
-
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
@@ -33,3 +34,10 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+@login_required
+def feed_view(request):
+    user = request.user
+    following_users = user.following.all()  
+    posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
+    return render(request, 'posts/feed.html', {'posts': posts})

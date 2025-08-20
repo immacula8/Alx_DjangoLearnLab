@@ -15,3 +15,9 @@ Used the full URL directly: http://127.0.0.1:8000/api/accounts/register/, or
 Created a Postman environment with base_url = http://127.0.0.1:8000.
 
 After that, all endpoints worked correctly in both browser and Postman.
+
+###Implementing User Follows and Feed Functionality###
+
+I built a custom user system by replacing Django’s default model with one that supports extra fields like date_of_birth and profile_photo, along with email-based authentication. Roles, groups, and permissions were added to control access, while strong security settings ensured safe deployment with HTTPS, CSRF protection, and secure cookies.
+
+On top of authentication, I integrated Django REST Framework to provide APIs with serializers, CRUD endpoints, filtering, and token-based authentication. Finally, social features were introduced: users can follow and unfollow each other, and a feed system was developed to display the latest posts from followed users in order of creation.
