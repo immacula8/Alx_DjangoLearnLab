@@ -51,7 +51,8 @@ class LikePostView(generics.GenericAPIView):
     def post(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
         like, created = Like.objects.get_or_create(user=request.user, post=post)
-
+        return Response({"message": "Post liked!"})
+    
         if not created:
             return Response({"detail": "You already liked this post."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -73,6 +74,7 @@ class UnlikePostView(generics.GenericAPIView):
     def post(self, request, pk):
         post = get_object_or_404(Post, pk=pk)
         like = Like.objects.filter(user=request.user, post=post)
+        return Response({"message": "Post unliked!"})
 
         if not like.exists():
             return Response({"detail": "You have not liked this post."}, status=status.HTTP_400_BAD_REQUEST)
